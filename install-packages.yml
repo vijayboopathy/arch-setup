@@ -27,6 +27,7 @@
       - openssh
       - unzip
       - glances
+      - ripgrep
     
     # Desktop environment packages
     desktop_packages:
@@ -76,6 +77,7 @@
       - maim
       - calibre
       - mupdf
+      - zathura
     
     # Bluetooth packages
     bluetooth_packages:
@@ -184,3 +186,6 @@
           3. Set up NetworkManager connections
           4. Configure bluetooth devices
           5. Install Flatpak applications as needed 
+# Need to install these packages using yay
+        # - slack-desktop
+        # - rofi-greenclip
