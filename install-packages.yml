@@ -26,44 +26,45 @@
       - rsync
       - openssh
       - unzip
-      - glances
       - ripgrep
+      - btop
     
     # Desktop environment packages
     desktop_packages:
       # KDE - Plasma 
-      # - plasma-meta
-      # - sddm
-      # - sddm-kcm
-      # - qt5-declarative
-      # - kvantum
-      # - dolphin
-      # - ark
+       - plasma-meta
+       - sddm
+       - sddm-kcm
+       - qt5-declarative
+       - kvantum
+       - dolphin
+       - ark
+       - solaar
       # i3 Windows Manager
-      - xorg
-      - xorg-xinit
-      - i3-wm
-      - i3lock
-      - i3blocks
-      - i3status
-      - dmenu
-      - feh
-      - ttf-font-awesome
-      - ttf-jetbrains-mono
-      - terminus-font
-      - ttf-nerd-fonts-symbols
-      - picom
-      - dolphin
-      - materia-gtk-theme
-      - papirus-icon-theme
-      - lxappearance
-      - arandr
-      - rofi
-      - fuse2
-      - pacman-contrib
-      - libnotify
-      - dunst
-      - xdotool
+      # - xorg
+      # - xorg-xinit
+      # - i3-wm
+      # - i3lock
+      # - i3blocks
+      # - i3status
+      # - dmenu
+      # - feh
+      # - ttf-font-awesome
+      # - ttf-jetbrains-mono
+      # - terminus-font
+      # - ttf-nerd-fonts-symbols
+      # - picom
+      # - dolphin
+      # - materia-gtk-theme
+      # - papirus-icon-theme
+      # - lxappearance
+      # - arandr
+      # - rofi
+      # - fuse2
+      # - pacman-contrib
+      # - libnotify
+      # - dunst
+      # - xdotool
 
     # Graphics and display packages
     graphics_packages:
@@ -78,6 +79,7 @@
       - calibre
       - mupdf
       - zathura
+      - newsboat
     
     # Bluetooth packages
     bluetooth_packages:
