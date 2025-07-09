@@ -29,6 +29,7 @@
       - ripgrep
       - btop
       - dysk
+      - fzf
     
     # Desktop environment packages
     desktop_packages:
