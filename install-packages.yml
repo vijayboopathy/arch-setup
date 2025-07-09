@@ -28,43 +28,48 @@
       - unzip
       - ripgrep
       - btop
+      - dysk
     
     # Desktop environment packages
     desktop_packages:
       # KDE - Plasma 
-       - plasma-meta
-       - sddm
-       - sddm-kcm
-       - qt5-declarative
-       - kvantum
-       - dolphin
-       - ark
-       - solaar
-      # i3 Windows Manager
-      # - xorg
-      # - xorg-xinit
-      # - i3-wm
-      # - i3lock
-      # - i3blocks
-      # - i3status
-      # - dmenu
-      # - feh
-      # - ttf-font-awesome
-      # - ttf-jetbrains-mono
-      # - terminus-font
-      # - ttf-nerd-fonts-symbols
-      # - picom
-      # - dolphin
-      # - materia-gtk-theme
-      # - papirus-icon-theme
-      # - lxappearance
-      # - arandr
-      # - rofi
-      # - fuse2
-      # - pacman-contrib
-      # - libnotify
-      # - dunst
-      # - xdotool
+      - plasma-meta
+      - sddm
+      - sddm-kcm
+      - qt5-declarative
+      - kvantum
+      - dolphin
+      - ark
+      - solaar
+        #i3 Windows Manager
+      - xorg
+      - xorg-xinit
+      - i3-wm
+      - i3lock
+      #- xautolock # Not available on pacman, use yay instead
+      - i3blocks
+      - i3status
+      - dmenu
+      - feh
+      - ttf-font-awesome
+      - ttf-jetbrains-mono
+      - terminus-font
+      - ttf-nerd-fonts-symbols
+      - picom
+      - dolphin
+      - materia-gtk-theme
+      - papirus-icon-theme
+      - lxappearance
+      - arandr
+      - rofi
+      - fuse2
+      - pacman-contrib
+      - libnotify
+      - dunst
+      - xdotool
+      - ttf-nerd-fonts-symbols-mono
+      - shellcheck
+      - cmake
 
     # Graphics and display packages
     graphics_packages:
@@ -80,6 +85,9 @@
       - mupdf
       - zathura
       - newsboat
+      - emacs
+      - fd
+      - steam
     
     # Bluetooth packages
     bluetooth_packages:
