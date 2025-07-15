@@ -76,6 +76,8 @@
       # Hyprland Window Manager
       - waybar
       - wofi
+      - wl-clipboard
+      - cliphist
 
     # Graphics and display packages
     graphics_packages:
@@ -100,7 +102,7 @@
       # There is bug with a2dp sink.
       - bluez
       - bluez-utils
-      # - blueman
+      - blueman
 
     # Package management and development
     dev_packages:
