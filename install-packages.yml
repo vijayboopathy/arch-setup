@@ -21,7 +21,13 @@
       - pipewire
       - pipewire-pulse
       - pipewire-alsa
+      - pipewire-jack
       - wireplumber
+      - pavucontrol
+      - wireplumber
+      - libldac
+      # - libopenaptx # This is not available using Pacman, so use yay
+      # - fdk-aac # This is not available using Pacman, so use yay
       - rtkit
       - reflector
       - rsync
@@ -35,6 +41,7 @@
       - dolphin
       - shellcheck
       - cmake
+      - solaar
 
     # Fonts
     fonts:
@@ -75,9 +82,13 @@
       #- xdotool
       # Hyprland Window Manager
       - waybar
+      - hyprpaper
       - wofi
       - wl-clipboard
       - cliphist
+      - hyprshot
+      - hyprlock
+      - swaync
 
     # Graphics and display packages
     graphics_packages:
