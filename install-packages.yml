@@ -17,6 +17,7 @@
       - less
       - tree
       - git
+      - pacman-contrib
       - pipewire
       - pipewire-pulse
       - pipewire-alsa
@@ -30,57 +31,61 @@
       - btop
       - dysk
       - fzf
-
-    # Desktop environment packages
-    desktop_packages:
-      # KDE - Plasma
-      - plasma-meta
-      - sddm
-      - sddm-kcm
-      - qt5-declarative
-      - kvantum
-      - dolphin
       - ark
-      - solaar
-        #i3 Windows Manager
-      - xorg
-      - xorg-xinit
-      - i3-wm
-      - i3lock
-      #- xautolock # Not available on pacman, use yay instead
-      - i3blocks
-      - i3status
-      - dmenu
-      - feh
+      - dolphin
+      - shellcheck
+      - cmake
+
+    # Fonts
+    fonts:
       - ttf-font-awesome
       - ttf-jetbrains-mono
       - terminus-font
       - ttf-nerd-fonts-symbols
-      - picom
-      - dolphin
-      - materia-gtk-theme
-      - papirus-icon-theme
-      - lxappearance
-      - arandr
-      - rofi
-      - fuse2
-      - pacman-contrib
-      - libnotify
-      - dunst
-      - xdotool
       - ttf-nerd-fonts-symbols-mono
-      - shellcheck
-      - cmake
+
+    # Desktop environment packages
+    desktop_packages:
+      # KDE - Plasma
+      #- plasma-meta
+      #- sddm
+      #- sddm-kcm
+      #- qt5-declarative
+      #- kvantum
+      #- solaar
+      #i3 Windows Manager
+      #- xorg
+      #- xorg-xinit
+      #- i3-wm
+      #- i3lock
+      #- xautolock # Not available on pacman, use yay instead
+      #- i3blocks
+      #- i3status
+      #- dmenu
+      #- feh
+      #- picom
+      #- materia-gtk-theme
+      #- papirus-icon-theme
+      #- lxappearance
+      #- arandr
+      #- rofi
+      #- fuse2
+      #- libnotify
+      #- dunst
+      #- xdotool
+      # Hyprland Window Manager
+      - waybar
+      - wofi
 
     # Graphics and display packages
     graphics_packages:
-      - nvidia-open
+      #- nvidia-open
       - nvidia-settings
 
     # Terminal and applications
     app_packages:
       - kitty
-      - firefox
+      #- firefox
       - maim
       - calibre
       - mupdf
@@ -88,14 +93,14 @@
       - newsboat
       - emacs
       - fd
-      - steam
+      #- steam
 
     # Bluetooth packages
     bluetooth_packages:
       # There is bug with a2dp sink.
-      # - bluez
-      # - bluez-utils
-      - blueman
+      - bluez
+      - bluez-utils
+      # - blueman
 
     # Package management and development
     dev_packages:
@@ -105,7 +110,7 @@
       - base-devel
 
     # Combine all packages
-    all_packages: "{{ system_packages + desktop_packages + graphics_packages + app_packages + bluetooth_packages + dev_packages }}"
+    all_packages: "{{ system_packages + fonts + desktop_packages + graphics_packages + app_packages + bluetooth_packages + dev_packages }}"
 
   tasks:
     - name: Update package database
@@ -162,12 +167,12 @@
         state: started
       when: system_install is changed or system_install is success
 
-    - name: Enable and start SDDM
-      systemd:
-        name: sddm
-        enabled: yes
-        state: started
-      when: desktop_install is changed or desktop_install is success
+    #- name: Enable and start SDDM
+    #  systemd:
+    #    name: sddm
+    #    enabled: yes
+    #    state: started
+    #  when: desktop_install is changed or desktop_install is success
 
     - name: Enable and start bluetooth service
       systemd:
