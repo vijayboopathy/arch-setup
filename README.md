@@ -14,6 +14,7 @@ Before running this playbook, ensure you have:
 2. **Install the required Ansible collection**:
    ```bash
    ansible-galaxy collection install community.general
+   ansible-galaxy collection install -r requirements.yml
    ```
 
 3. **Root or sudo access** to install packages

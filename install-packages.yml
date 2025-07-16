@@ -48,6 +48,12 @@
       - starship
       - playerctl
 
+    # AUR system packages
+    aur_system_packages:
+      - slack-desktop
+      - zen-browser-bin
+      - 1password
+
     # Fonts
     fonts:
       - ttf-font-awesome
@@ -129,9 +135,23 @@
       - base-devel
 
     # Combine all packages
-    all_packages: "{{ system_packages + fonts + desktop_packages + graphics_packages + app_packages + bluetooth_packages + dev_packages }}"
+    all_packages: "{{ system_packages + aur_system_packages + fonts + desktop_packages + graphics_packages + app_packages + bluetooth_packages + dev_packages }}"
 
   tasks:
+    - name: Create the `aur_builder` user
+      ansible.builtin.user:
+        name: aur_builder
+        create_home: yes
+        group: wheel
+
+    - name: Allow the `aur_builder` user to run `sudo pacman` without a password
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers.d/11-install-aur_builder
+        line: "aur_builder ALL=(ALL) NOPASSWD: /us/bin/pacman"
+        create: yes
+        mode: 0644
+        validate: "visudo -cf %s"
+
     - name: Update package database
       community.general.pacman:
         update_cache: yes
@@ -143,6 +163,13 @@
         state: present
         update_cache: no
       register: system_install
+
+    - name: Install AUR system packages
+      kewlfft.aur.aur: 
+        name: "{{ aur_system_packages }}"
+        use: makepkg
+        state: present
+      become_user: aur_builder
 
     - name: Install desktop environment packages
       community.general.pacman:
@@ -207,6 +234,7 @@
 
           Installed packages by category:
           - System: {{ system_packages | length }} packages
+          - AUR System: {{ aur_system_packages | length }} packages
           - Desktop: {{ desktop_packages | length }} packages  
           - Graphics: {{ graphics_packages | length }} packages
           - Applications: {{ app_packages | length }} packages
@@ -221,7 +249,4 @@
           3. Set up NetworkManager connections
           4. Configure bluetooth devices
           5. Install Flatpak applications as needed
-        # - slack-desktop
-        # - rofi-greenclip
 
-# Need to install these packages using yay
