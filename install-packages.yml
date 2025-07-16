@@ -15,8 +15,10 @@
       - which
       - nvim
       - less
+      - man
       - tree
       - git
+      - fastfetch
       - pacman-contrib
       - pipewire
       - pipewire-pulse
@@ -42,6 +44,9 @@
       - shellcheck
       - cmake
       - solaar
+      - stow
+      - starship
+      - playerctl
 
     # Fonts
     fonts:
@@ -88,6 +93,7 @@
       - cliphist
       - hyprshot
       - hyprlock
+      - hypridle
       - swaync
 
     # Graphics and display packages
