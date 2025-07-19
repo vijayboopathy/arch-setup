@@ -135,6 +135,7 @@
       - python-pip
       - python-ansible
       - base-devel
+      - lazygit
       - pyright
       - yaml-language-server
       - ansible-language-server
