@@ -17,6 +17,7 @@
       - less
       - man
       - tree
+      - tmux
       - git
       - fastfetch
       - pacman-contrib
@@ -53,6 +54,7 @@
       - slack-desktop
       - zen-browser-bin
       - 1password
+      - prettierd # This is a development package but not available in Pacman
 
     # Fonts
     fonts:
@@ -133,6 +135,9 @@
       - python-pip
       - python-ansible
       - base-devel
+      - pyright
+      - yaml-language-server
+      - ansible-language-server
 
     # Combine all packages
     all_packages: "{{ system_packages + aur_system_packages + fonts + desktop_packages + graphics_packages + app_packages + bluetooth_packages + dev_packages }}"
@@ -165,7 +170,7 @@
       register: system_install
 
     - name: Install AUR system packages
-      kewlfft.aur.aur: 
+      kewlfft.aur.aur:
         name: "{{ aur_system_packages }}"
         use: makepkg
         state: present
@@ -249,4 +254,3 @@
           3. Set up NetworkManager connections
           4. Configure bluetooth devices
           5. Install Flatpak applications as needed
-
