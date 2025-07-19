@@ -55,6 +55,7 @@
       - zen-browser-bin
       - 1password
       - prettierd # This is a development package but not available in Pacman
+      - python-imageio-ffmpeg
 
     # Fonts
     fonts:
@@ -120,6 +121,7 @@
       - newsboat
       - emacs
       - fd
+      - thunderbird
       #- steam
 
     # Bluetooth packages
@@ -139,9 +141,92 @@
       - pyright
       - yaml-language-server
       - ansible-language-server
+      - python-imageio
+
+    ml4w_dotfiles_aur_dependencies:
+      - python-screeninfo
+      - wlogout
+      - gum
+      - hyprland
+      - hyprpaper
+      - hyprlock
+      - hypridle
+      - hyprpicker
+      - uwsm
+      - eza
+      - nwg-look
+      - rofi-wayland
+      - hyprshade
+      - waypaper
+      - grimblast-git
+      - bibata-cursor-theme-bin
+      - pacseek
+      - nwg-dock-hyprland
+      - checkupdates-with-aur
+      - python-pywalfox
+      - python-imageio-ffmpeg
+      - python-imageio
+
+    ml4w_dotfiles_dependencies:
+      - wget
+      - unzip
+      - rsync
+      - git
+      - figlet
+      - xdg-user-dirs
+      - noto-fonts
+      - noto-fonts-emoji
+      - noto-fonts-cjk
+      - noto-fonts-extra
+      - xdg-desktop-portal-hyprland
+      - libnotify
+      - kitty
+      - qt5-wayland
+      - qt6-wayland
+      - fastfetch
+      - xdg-desktop-portal-gtk
+      - python-pip
+      - python-gobject
+      - tumbler
+      - brightnessctl
+      - nm-connection-editor
+      - network-manager-applet
+      - gtk4
+      - libadwaita
+      - fuse2
+      - imagemagick
+      - jq
+      - xclip
+      - neovim
+      - htop
+      - rust
+      - cargo
+      - blueman
+      - grim
+      - slurp
+      - cliphist
+      - qt6ct
+      - waybar
+      - polkit-gnome
+      - zsh
+      - zsh-completions
+      - fzf
+      - pavucontrol
+      - papirus-icon-theme
+      - breeze
+      - flatpak
+      - swaync
+      - gvfs
+      - otf-font-awesome
+      - ttf-fira-sans
+      - ttf-fira-code
+      - ttf-firacode-nerd
+      - ttf-dejavu
+      - power-profiles-daemon
+      - vlc
 
     # Combine all packages
-    all_packages: "{{ system_packages + aur_system_packages + fonts + desktop_packages + graphics_packages + app_packages + bluetooth_packages + dev_packages }}"
+    all_packages: "{{ system_packages + aur_system_packages + fonts + desktop_packages + graphics_packages + app_packages + bluetooth_packages + dev_packages + ml4w_dotfiles_dependencies + ml4w_dotfiles_aur_dependencies }}"
 
   tasks:
     - name: Create the `aur_builder` user
@@ -176,6 +261,14 @@
         use: makepkg
         state: present
       become_user: aur_builder
+
+    - name: Install ml4w_dotfiles_aur_dependencies
+      kewlfft.aur.aur:
+        name: "{{ ml4w_dotfiles_aur_dependencies }}"
+        use: yay
+        state: present
+      become_user: aur_builder
+      tags: dotfiles-setup
 
     - name: Install desktop environment packages
       community.general.pacman:
@@ -212,6 +305,14 @@
         update_cache: no
       register: dev_install
 
+    - name: Install ml4w_dotfiles dependencies
+      community.general.pacman:
+        name: "{{ ml4w_dotfiles_dependencies }}"
+        state: present
+        update_cache: no
+      register: ml4w_install
+      tags: dotfiles-setup
+
     - name: Enable and start NetworkManager
       systemd:
         name: NetworkManager
@@ -246,6 +347,9 @@
           - Applications: {{ app_packages | length }} packages
           - Bluetooth: {{ bluetooth_packages | length }} packages
           - Development: {{ dev_packages | length }} packages
+          - ML4W Dotfiles: {{ ml4w_dotfiles_dependencies | length }} packages
+
+
 
           Total packages installed: {{ all_packages | length }}
 
