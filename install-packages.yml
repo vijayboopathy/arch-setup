@@ -28,9 +28,6 @@
       - wireplumber
       - pavucontrol
       - wireplumber
-      - libldac
-      # - libopenaptx # This is not available using Pacman, so use yay
-      # - fdk-aac # This is not available using Pacman, so use yay
       - rtkit
       - reflector
       - rsync
@@ -56,6 +53,7 @@
       - 1password
       - prettierd # This is a development package but not available in Pacman
       - python-imageio-ffmpeg
+      - anki
 
     # Fonts
     fonts:
@@ -258,8 +256,9 @@
     - name: Install AUR system packages
       kewlfft.aur.aur:
         name: "{{ aur_system_packages }}"
-        use: makepkg
+        use: yay
         state: present
+      become: yes
       become_user: aur_builder
 
     - name: Install ml4w_dotfiles_aur_dependencies
