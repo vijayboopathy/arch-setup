@@ -37,6 +37,8 @@
       - btop
       - dysk
       - fzf
+      - atuin
+      - yazi
       - ark
       - dolphin
       - shellcheck
@@ -45,6 +47,7 @@
       - stow
       - starship
       - playerctl
+      - zoxide
 
     # AUR system packages
     aur_system_packages:
