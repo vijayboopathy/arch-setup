@@ -19,13 +19,11 @@
       - tree
       - tmux
       - git
-      - fastfetch
       - pacman-contrib
       - pipewire
       - pipewire-pulse
       - pipewire-alsa
       - pipewire-jack
-      - wireplumber
       - pavucontrol
       - wireplumber
       - rtkit
@@ -144,90 +142,71 @@
       - ansible-language-server
       - python-imageio
 
-    ml4w_dotfiles_aur_dependencies:
-      - python-screeninfo
-      - wlogout
-      - gum
-      - hyprland
-      - hyprpaper
-      - hyprlock
-      - hypridle
-      - hyprpicker
-      - uwsm
-      - eza
-      - nwg-look
-      - rofi-wayland
-      - hyprshade
-      - waypaper
-      - grimblast-git
-      - bibata-cursor-theme-bin
-      - pacseek
-      - nwg-dock-hyprland
-      - checkupdates-with-aur
-      - python-pywalfox
-      - python-imageio-ffmpeg
-      - python-imageio
-
-    ml4w_dotfiles_dependencies:
-      - wget
-      - unzip
-      - rsync
-      - git
-      - figlet
-      - xdg-user-dirs
-      - noto-fonts
-      - noto-fonts-emoji
-      - noto-fonts-cjk
-      - noto-fonts-extra
-      - xdg-desktop-portal-hyprland
-      - libnotify
-      - kitty
-      - qt5-wayland
-      - qt6-wayland
-      - fastfetch
-      - xdg-desktop-portal-gtk
-      - python-pip
-      - python-gobject
-      - tumbler
-      - brightnessctl
-      - nm-connection-editor
-      - network-manager-applet
-      - gtk4
-      - libadwaita
-      - fuse2
-      - imagemagick
-      - jq
-      - xclip
-      - neovim
-      - htop
-      - rust
-      - cargo
-      - blueman
-      - grim
-      - slurp
-      - cliphist
-      - qt6ct
-      - waybar
-      - polkit-gnome
-      - zsh
-      - zsh-completions
-      - fzf
-      - pavucontrol
-      - papirus-icon-theme
-      - breeze
-      - flatpak
-      - swaync
-      - gvfs
-      - otf-font-awesome
-      - ttf-fira-sans
-      - ttf-fira-code
-      - ttf-firacode-nerd
-      - ttf-dejavu
-      - power-profiles-daemon
-      - vlc
+    #    ml4w_dotfiles_aur_dependencies:
+    #      - python-screeninfo
+    #      - wlogout
+    #      - gum
+    #      - uwsm
+    #      - eza
+    #      - nwg-look
+    #      - rofi-wayland
+    #      - hyprshade
+    #      - waypaper
+    #      - grimblast-git
+    #      - bibata-cursor-theme-bin
+    #      - pacseek
+    #      - nwg-dock-hyprland
+    #      - checkupdates-with-aur
+    #      - python-pywalfox
+    #
+    #    ml4w_dotfiles_dependencies:
+    #      - wget
+    #      - figlet
+    #      - xdg-user-dirs
+    #      - noto-fonts
+    #      - noto-fonts-emoji
+    #      - noto-fonts-cjk
+    #      - noto-fonts-extra
+    #      - xdg-desktop-portal-hyprland
+    #      - libnotify
+    #      - qt5-wayland
+    #      - qt6-wayland
+    #      - fastfetch
+    #      - xdg-desktop-portal-gtk
+    #      - python-gobject
+    #      - tumbler
+    #      - brightnessctl
+    #      - nm-connection-editor
+    #      - network-manager-applet
+    #      - gtk4
+    #      - libadwaita
+    #      - fuse2
+    #      - imagemagick
+    #      - jq
+    #      - xclip
+    #      - neovim
+    #      - htop
+    #      - rust
+    #      - cargo
+    #      - grim
+    #      - slurp
+    #      - qt6ct
+    #      - polkit-gnome
+    #      - zsh
+    #      - zsh-completions
+    #      - papirus-icon-theme
+    #      - breeze
+    #      - gvfs
+    #      - otf-font-awesome
+    #      - ttf-fira-sans
+    #      - ttf-fira-code
+    #      - ttf-firacode-nerd
+    #      - ttf-dejavu
+    #      - power-profiles-daemon
+    #      - vlc
 
     # Combine all packages
-    all_packages: "{{ system_packages + aur_system_packages + fonts + desktop_packages + graphics_packages + app_packages + bluetooth_packages + dev_packages + ml4w_dotfiles_dependencies + ml4w_dotfiles_aur_dependencies }}"
+    all_packages: "{{ system_packages + aur_system_packages + fonts + desktop_packages + graphics_packages + app_packages + bluetooth_packages + dev_packages }}"
 
   tasks:
     - name: Create the `aur_builder` user
@@ -264,13 +243,13 @@
       become: yes
       become_user: aur_builder
 
-    - name: Install ml4w_dotfiles_aur_dependencies
-      kewlfft.aur.aur:
-        name: "{{ ml4w_dotfiles_aur_dependencies }}"
-        use: yay
-        state: present
-      become_user: aur_builder
-      tags: dotfiles-setup
+    #    - name: Install ml4w_dotfiles_aur_dependencies
+    #      kewlfft.aur.aur:
+    #        name: "{{ ml4w_dotfiles_aur_dependencies }}"
+    #        use: yay
+    #        state: present
+    #      become_user: aur_builder
+    #      tags: dotfiles-setup
 
     - name: Install desktop environment packages
       community.general.pacman:
@@ -307,13 +286,13 @@
         update_cache: no
       register: dev_install
 
-    - name: Install ml4w_dotfiles dependencies
-      community.general.pacman:
-        name: "{{ ml4w_dotfiles_dependencies }}"
-        state: present
-        update_cache: no
-      register: ml4w_install
-      tags: dotfiles-setup
+    #    - name: Install ml4w_dotfiles dependencies
+    #      community.general.pacman:
+    #        name: "{{ ml4w_dotfiles_dependencies }}"
+    #        state: absent
+    #        update_cache: no
+    #      register: ml4w_install
+    #      tags: dotfiles-setup
 
     - name: Enable and start NetworkManager
       systemd:
@@ -349,7 +328,6 @@
           - Applications: {{ app_packages | length }} packages
           - Bluetooth: {{ bluetooth_packages | length }} packages
           - Development: {{ dev_packages | length }} packages
-          - ML4W Dotfiles: {{ ml4w_dotfiles_dependencies | length }} packages
 
 
 
