@@ -1,0 +1,43 @@
+---
+- name: Fix Hyprland related issues with AMD iGPU + Nvidia GPU
+  hosts: localhost
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Ensure MODULES in mkinitcpio.conf
+      lineinfile:
+        path: /etc/mkinitcpio.conf
+        regexp: "^MODULES="
+        line: "MODULES=(amdgpu nvidia nvidia_modeset nvidia_uvm nvidia_drm)"
+        backup: yes
+      notify: regenerate initramfs
+
+    - name: Create modeprobe.d amdgpu-first.conf
+      copy:
+        dest: /etc/modprobe.d/amdgpu-first.conf
+        content: |
+          softdep nvidia pre: amdgpu
+        backup: yes
+
+    - name: Check if radeon module is loaded
+      shell: lsmod | grep '^radeon' | wc -l
+      register: radeon_loaded
+      changed_when: false
+      failed_when: false
+
+    - name: Blacklist radeon if present
+      copy:
+        dest: /etc/modprobe.d/blacklist-radeon.conf
+        content: "blacklist radeon"
+        backup: yes
+      when: radeon_loaded.stdout | int > 0
+
+    - name: Regenerate initramfs
+      command: mkinitcpio -P
+      become: yes
+
+  handlers:
+    - name: regenerate initramfs
+      command: mkinitcpio -P
+      become: yes
