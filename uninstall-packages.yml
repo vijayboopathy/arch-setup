@@ -1,5 +1,5 @@
 ---
-- name: Install application packages
+- name: Uninstall application packages
   hosts: localhost
   become: true
   gather_facts: false
@@ -7,23 +7,18 @@
   vars:
     # application packages
     application_packages:
-      - obsidian
     aur_application_packages:
-      - zen-browser-bin
-      - 1password
-      - opencode-bin
       - light
-      - prettierd
 
   tasks:
     - name: Update package database
       community.general.pacman:
         update_cache: yes
 
-    - name: Install application packages
+    - name: Uninstall application packages
       community.general.pacman:
         name: "{{ application_packages }}"
-        state: present
+        state: absent
         update_cache: no
 
     - name: Create the `aur_builder` user
@@ -40,11 +35,11 @@
         mode: 0644
         validate: "/usr/bin/visudo -cf %s"
         
-    - name: Install AUR application packages
+    - name: Uninstall AUR application packages
       kewlfft.aur.aur:
         name: "{{ aur_application_packages }}"
         use: yay
-        state: present
+        state: absent
       become: yes
       become_user: aur_builder
 

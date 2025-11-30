@@ -51,6 +51,10 @@
       - bluez-utils
       - blueman
       - ghostty
+      - nerd-fonts
+      - yaml-language-server
+      - ansible-language-server
+      - pyright
 
     custom_become_user: "vijay"
 

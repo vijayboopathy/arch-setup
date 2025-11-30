@@ -111,3 +111,7 @@ stow --no-folding -vt ~ solaar
 ```bash
 stow --no-folding -vt ~ yazi
 ```
+9. Copy `.zshrc` configruation
+```bash
+cp .zshrc ~/
+```
