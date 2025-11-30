@@ -64,7 +64,7 @@ ansible-playbook core-packages.yml
 ## Install Hyperland packages
 1. If you have Nvidia graphics card installed in your system, then it is [recommended](https://update.link) to install the following packages.
 ```bash
-sudo pacman -S nvidia-dkms nvidia-utils egl-wayland
+sudo pacman -S nvidia nvidia-utils nvidia-settings egl-wayland
 ```
 2. Install Hyprland packages
 ```bash
@@ -77,7 +77,7 @@ ansible-playbook application-packages.yml
 ```
 
 ## Dotfiles set up
-1. Clone the dotfiles repo
+1. Clone the dotfiles and scripts repo
 ```bash
 git clone https://github.com/vijayboopathy/dotfiles.git
 cd dotfiles

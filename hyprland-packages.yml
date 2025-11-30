@@ -7,6 +7,9 @@
   vars:
     # Hyprland packages
     hyprland_packages:
+      - nvidia
+      - nvidia-utils
+      - nvidia-settings
       - hyprland
       - hyprpaper
       - hyprshot
