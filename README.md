@@ -102,6 +102,8 @@ stow --no-folding -vt ~ ghostty
 6. Stow Atuin configurations
 ```bash
 stow --no-folding -vt ~ atuin
+# import history from zsh, if needed
+atuin import zsh
 ```
 7. Stow Solaar configurations
 ```bash
