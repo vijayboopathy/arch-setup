@@ -1,0 +1,62 @@
+---
+- name: Install Hyprland packages
+  hosts: localhost
+  become: true
+  gather_facts: false
+
+  vars:
+    # Hyprland packages
+    hyprland_packages:
+      - hyprland
+      - hyprpaper
+      - hyprshot
+      - hyprlock
+      - hypridle
+      - waybar
+      - wofi
+      - swaync
+      - sddm
+    sddm_user: "vijay"
+    sddm_session: hyprland
+
+  tasks:
+    - name: Update package database
+      community.general.pacman:
+        update_cache: yes
+
+    - name: Install Hyprland packages
+      community.general.pacman:
+        name: "{{ hyprland_packages }}"
+        state: present
+        update_cache: no
+
+    - name: Set default boot target to graphical
+      ansible.builtin.systemd:
+        name: graphical.target
+        enabled: true
+
+    - name: Enable and start SDDM
+      ansible.builtin.systemd:
+        name: sddm.service
+        enabled: true
+        state: started
+
+    - name: Create SDDM config directory
+      ansible.builtin.file:
+        path: /etc/sddm.conf.d
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    # We can autologin through SDDM since we have hyprlock
+    - name: Configure SDDM autologin
+      ansible.builtin.copy:
+        dest: /etc/sddm.conf.d/autologin.conf
+        content: |
+          [Autologin]
+          User={{ sddm_user }}
+          Session={{ sddm_session }}
+        owner: root
+        group: root
+        mode: "0644"

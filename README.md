@@ -1,169 +1,113 @@
 # Arch Linux Package Installation with Ansible
 
-This repository contains an Ansible playbook to automate the installation of essential packages on a fresh Arch Linux system.
+This repository contains multiple Ansible playbooks to automate installation of essential packages and other utilities on a fresh Arch Linux system.
 
 ## Prerequisites
-
-Before running this playbook, ensure you have:
-
-1. **Ansible installed** on your Arch Linux system:
-   ```bash
-   sudo pacman -S ansible
-   ```
-
-2. **Install the required Ansible collection**:
-   ```bash
-   ansible-galaxy collection install community.general
-   ansible-galaxy collection install -r requirements.yml
-   ```
-
-3. **Root or sudo access** to install packages
-
-4. **Internet connection** to download packages from the Arch repositories
-
-## Packages to be Installed
-
-The playbook installs the following packages, organized by category:
-
-### System Packages
-- `networkmanager` - Network connection manager
-- `sudo` - Privilege escalation tool
-- `which` - Command location utility
-- `vim` - Text editor
-
-### Desktop Environment
-- `plasma-meta` - KDE Plasma desktop environment
-- `sddm` - Simple Desktop Display Manager
-- `sddm-kcm` - KDE Control Module for SDDM
-- `qt5-declarative` - Qt5 declarative components
-
-### Graphics
-- `nvidia-open` - Open-source NVIDIA drivers
-
-### Applications
-- `kitty` - GPU-accelerated terminal emulator
-- `firefox` - Web browser
-
-### Bluetooth
-- `bluez` - Bluetooth protocol stack
-- `bluez-utils` - Bluetooth utilities
-
-### Development & Package Management
-- `flatpak` - Application sandboxing and distribution framework
-- `python-pip` - Python package installer
-- `python-ansible` - Ansible Python package
-
-## Usage
-
-### 1. Run the Playbook
-
-Execute the playbook with:
-
+Before running this playbook, ensure you have run the following steps:
+1. CPU microcode updates
 ```bash
-ansible-playbook install-packages.yml
+# run as root
+# on AMD systems
+pacman -S amd-ucode
+
+# on Intel systems
+pacman -S intel-ucode
+```
+2. The following utilities installed on your system
+> Restart the system after this step
+```bash
+# run as root
+pacman -S linux-firmware man sudo nvim git openssh networkmanager reflector zsh
+reboot
+```
+3. Update mirror list
+```bash
+# run as root
+reflector -c India --sort rate > /etc/pacman.d/mirrorlist
+```
+4. Create a user
+```bash
+# run as root
+useradd -m -G wheel -s /usr/bin/zsh vijay
+
+# set a password
+passwd vijay
+```
+5. Switch to the newly created user
+```bash
+su vijay
 ```
 
-### 2. Run with Verbose Output (Recommended)
-
-For detailed output and better debugging:
-
+6. Install Ansible
 ```bash
-ansible-playbook install-packages.yml -v
+sudo pacman -S ansible
 ```
 
-### 3. Run with Extra Verbosity
-
-For maximum detail:
-
+7. Clone this repository
 ```bash
-ansible-playbook install-packages.yml -vvv
+git clone git@github.com:vijayboopathy/arch-setup.git
+cd arch-setup
+```
+8. Install the required Ansible collections
+```bash
+ansible-galaxy collection install community.general
+ansible-galaxy collection install -r requirements.yml
 ```
 
-## What the Playbook Does
 
-1. **Updates the package database** using `pacman -Sy`
-2. **Installs packages in logical groups** to ensure dependencies are met
-3. **Enables and starts essential services**:
-   - NetworkManager (network management)
-   - SDDM (display manager)
-   - Bluetooth service
-4. **Provides a summary** of installed packages and next steps
-
-## Post-Installation Steps
-
-After running the playbook, consider these additional steps:
-
-### 1. Reboot the System
+## Install the core packages
+These packages can be installed on all the systems irrespective of their processor(`x86_64` only), DE preferences, etc.,
 ```bash
-sudo reboot
+ansible-playbook core-packages.yml
 ```
 
-### 2. Configure NetworkManager
+## Install Hyperland packages
+1. If you have Nvidia graphics card installed in your system, then it is [recommended](https://update.link) to install the following packages.
 ```bash
-nmtui  # Text-based network configuration
-# or
-nm-connection-editor  # GUI network configuration
+sudo pacman -S nvidia-dkms nvidia-utils egl-wayland
+```
+2. Install Hyprland packages
+```bash
+ansible-playbook hyprland-packages.yml
 ```
 
-### 3. Configure SDDM (if needed)
+## Install application packages
 ```bash
-sudo systemctl enable sddm
-sudo systemctl start sddm
+ansible-playbook application-packages.yml
 ```
 
-### 4. Set up Bluetooth
+## Dotfiles set up
+1. Clone the dotfiles repo
 ```bash
-bluetoothctl
-# Follow the interactive prompts to pair devices
+git clone https://github.com/vijayboopathy/dotfiles.git
+cd dotfiles
 ```
-
-### 5. Install Flatpak Applications
+2. Stow Hyprland cofigurations
 ```bash
-flatpak install flathub org.mozilla.firefox
-flatpak install flathub org.gnome.Software
+# --no-folding option creates directories, if they don't exist
+stow --no-folding -vt ~ hypr
 ```
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Package conflicts**: If you encounter package conflicts, try running:
-   ```bash
-   sudo pacman -Syu
-   ```
-
-2. **Missing dependencies**: If some packages fail to install, check for missing dependencies:
-   ```bash
-   sudo pacman -S --needed base-devel
-   ```
-
-3. **Service startup issues**: If services don't start properly, check their status:
-   ```bash
-   sudo systemctl status NetworkManager
-   sudo systemctl status sddm
-   sudo systemctl status bluetooth
-   ```
-
-### Logs and Debugging
-
-- Check Ansible logs for detailed error messages
-- Review system logs: `journalctl -xe`
-- Check package installation logs: `pacman -Q`
-
-## Customization
-
-To modify the package list:
-
-1. Edit the `vars` section in `install-packages.yml`
-2. Add or remove packages from the appropriate category lists
-3. Run the playbook again
-
-## Security Notes
-
-- This playbook requires root privileges to install system packages
-- Review the package list before running to ensure it meets your security requirements
-- Consider using a more restrictive sudo configuration after installation
-
-## License
-
-This playbook is provided as-is for educational and automation purposes. Use at your own risk and always review the packages being installed. 
+3. Stow Neovim configurations
+```bash
+stow --no-folding -vt ~ nvim
+```
+4. Stow Starship configurations
+```bash
+stow --no-folding -vt ~ starship
+```
+5. Stow Ghostty configurations
+```bash
+stow --no-folding -vt ~ ghostty
+```
+6. Stow Atuin configurations
+```bash
+stow --no-folding -vt ~ atuin
+```
+7. Stow Solaar configurations
+```bash
+stow --no-folding -vt ~ solaar
+```
+8. Stow Yazi configurations
+```bash
+stow --no-folding -vt ~ yazi
+```

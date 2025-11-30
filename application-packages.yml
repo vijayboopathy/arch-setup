@@ -1,0 +1,61 @@
+---
+- name: Install application packages
+  hosts: localhost
+  become: true
+  gather_facts: false
+
+  vars:
+    # application packages
+    application_packages:
+      - obsidian
+    aur_application_packages:
+      - zen-browser-bin
+      - 1password
+      - opencode-bin
+
+  tasks:
+    - name: Update package database
+      community.general.pacman:
+        update_cache: yes
+
+    - name: Install application packages
+      community.general.pacman:
+        name: "{{ application_packages }}"
+        state: present
+        update_cache: no
+
+    - name: Create the `aur_builder` user
+      ansible.builtin.user:
+        name: aur_builder
+        create_home: yes
+        group: wheel
+
+    - name: Allow the `aur_builder` user to run `sudo pacman` without password
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers.d/11-install-aur_builder
+        line: "aur_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman"
+        create: yes
+        mode: 0644
+        validate: "/usr/bin/visudo -cf %s"
+        
+    - name: Install AUR application packages
+      kewlfft.aur.aur:
+        name: "{{ aur_application_packages }}"
+        use: yay
+        state: present
+      become: yes
+      become_user: aur_builder
+
+    - name: Kill `aur_builder` processes
+      ansible.builtin.shell: pkill -u aur_builder || true
+
+    - name: Remove the `aur_builder` user
+      ansible.builtin.user:
+        name: aur_builder
+        state: absent
+        remove: yes # removes home directory
+
+    - name: Remove the sudoers file for `aur_builder`
+      ansible.builtin.file:
+        path: /etc/sudoers.d/11-install-aur_builer
+        state: absent
