@@ -55,6 +55,7 @@
       - yaml-language-server
       - ansible-language-server
       - pyright
+      - wl-clipboard
 
     custom_become_user: "vijay"
 
@@ -82,7 +83,7 @@
         owner: "{{ custom_become_user }}"
         group: "{{ custom_become_user }}"
         mode: "0755"
-    
+
     - name: Clone yay AUR repository
       ansible.builtin.git:
         repo: "https://aur.archlinux.org/yay.git"
@@ -92,7 +93,6 @@
         depth: 0
       become: true
       become_user: "{{ custom_become_user }}"
-
 
     - name: Build and install yay from AUR
       ansible.builtin.command:
